@@ -4,6 +4,7 @@ public sealed class UIGameplayBinder : MonoBehaviour
 {
 
     [SerializeField] private StageNumberView stageNumberView;
+    [SerializeField] private AmmoIconView ammoIconView;
     private void OnEnable()
     {
         GameSignals.StageStarted  += OnStageStarted;
@@ -29,7 +30,7 @@ public sealed class UIGameplayBinder : MonoBehaviour
 
     private void OnAmmoSet(int ammo)
     {
-        // 탄 수 절대값 세팅 (초기화/리로드)
+        ammoIconView.Render(ammo);
     }
 
     private void OnAmmoChanged(int ammo)
