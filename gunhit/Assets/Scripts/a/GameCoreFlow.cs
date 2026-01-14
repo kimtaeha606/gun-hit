@@ -155,7 +155,7 @@ public class GameCoreFlow : MonoBehaviour
         if (fruitsRemaining <= 0) return;
 
         if (gameOverRoutine != null) StopCoroutine(gameOverRoutine);
-        gameOverRoutine = StartCoroutine(CoGameOverAfter(0.6f)); // 0.4~1.0 추천, 3초는 너무 김
+        gameOverRoutine = StartCoroutine(CoGameOverAfter(1.0f)); // 0.4~1.0 추천, 3초는 너무 김
     }
 
     private IEnumerator CoGameOverAfter(float delay)
