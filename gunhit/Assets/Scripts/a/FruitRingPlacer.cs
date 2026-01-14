@@ -60,6 +60,8 @@ public sealed class FruitRingPlacer
     /// </summary>
     public List<float> BuildAngles(int fruitCount, Rules rules, int? seed = null)
     {
+
+        Debug.Log($"mode={rules.mode}");
         if (fruitCount <= 0)
             return new List<float>();
 

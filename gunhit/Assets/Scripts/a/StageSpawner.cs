@@ -1,155 +1,141 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// StageSpawner (ÇØ°á A ÃÖÁ¾º»)
-/// ¸ñÇ¥:
-/// 1) µğ½ºÅ© ½ºÄÉÀÏÀ» ¹Ù²ãµµ °úÀÏÀÌ °°ÀÌ Ä¿ÁöÁö ¾Ê°Ô ÇÑ´Ù.
-/// 2) µğ½ºÅ©°¡ È¸ÀüÇÏ¸é °úÀÏµµ °°ÀÌ È¸ÀüÇÏ°Ô ÇÑ´Ù.
-/// 3) °úÀÏÀÌ µğ½ºÅ© Ç¥¸é¿¡ "ºÙ¾î" º¸ÀÌ°Ô ¹İÁö¸§À» °è»êÇÑ´Ù.
-///
-/// ¾À(¶Ç´Â ÇÁ¸®ÆÕ) ±ÇÀå Hierarchy:
-/// DiskRig (È¸Àü Áß½É, scale=1)
-/// ¦§¦¡ DiskVisual (SpriteRenderer, scale¸¸ ¿©±â¼­ º¯°æ)
-/// ¦¦¦¡ FruitRoot  (scale=1 °íÁ¤, °úÀÏÀº ¿©±â ¹ØÀ¸·Î ½ºÆù)
-///
-/// - DiskController´Â DiskRig¸¦ È¸Àü½ÃÅ°´Â °ÍÀ» ±ÇÀå.
-/// - DiskVisual¸¸ Å©±â¸¦ Á¶Àı(Scale)ÇÏ°í, FruitRoot´Â scale=1 À¯Áö.
-/// </summary>
 public sealed class StageSpawner : MonoBehaviour
 {
-    [Header("Rig / Parents")]
-    [Tooltip("È¸Àü Áß½É(=DiskRig). DiskController°¡ È¸Àü½ÃÅ°´Â ´ë»ó°ú µ¿ÀÏÇÏ°Ô ¸ÂÃß¼¼¿ä.")]
-    [SerializeField] private Transform diskRig;
+    [Header("Disk")]
+    [SerializeField] private Transform diskRig;              // íšŒì „ ì¤‘ì‹¬(ì§„ì§œ ì›ì )
+    [SerializeField] private SpriteRenderer diskSprite;      // ë¹„ì£¼ì–¼(ë°˜ì§€ë¦„ ì¸¡ì •ìš©)
 
-    [Tooltip("°úÀÏÀÌ »ı¼ºµÉ ºÎ¸ğ(=FruitRoot). DiskRigÀÇ ÀÚ½ÄÀÌ¾î¾ß µğ½ºÅ©¿Í °°ÀÌ È¸ÀüÇÕ´Ï´Ù.")]
-    [SerializeField] private Transform fruitRoot;
-
-    [Header("Prefabs")]
+    [Header("Fruits")]
+    [SerializeField] private Transform worldFruitRoot;       // (ê¶Œì¥) StageSpawner ì•„ë˜ ë¹ˆ ì˜¤ë¸Œì íŠ¸, scale=1
     [SerializeField] private FruitTarget fruitPrefab;
+    [SerializeField] private SpriteRenderer fruitSprite;     // fruitPrefab ë‚´ë¶€ SpriteRenderer ì°¸ì¡°(ì—ì…‹ ë°˜ì§€ë¦„ìš©)
 
-    [Tooltip("¹èÄ¡ ±ÔÄ¢(ÀÎ½ºÆåÅÍ¿¡¼­ Random/Uniform µî ¼±ÅÃ). nullÀÌ¸é ±âº» Rules »ç¿ë.")]
+    [Header("Placement")]
     [SerializeField] private FruitRingPlacer.Rules placementRules;
 
-    [Header("Visual Refs")]
-    [Tooltip("µğ½ºÅ© ºñÁÖ¾ó SpriteRenderer(=DiskVisual). ½ºÄÉÀÏÀº ¿©±â¸¸ º¯°æÇÏ¼¼¿ä.")]
-    [SerializeField] private SpriteRenderer diskSprite;
+    [Header("Padding")]
+    [SerializeField] private float contactPadding = 0.00f;   // ë¨¼ì € 0ìœ¼ë¡œ ë‘ê³  ì‹œì‘
 
-    [Tooltip("°úÀÏ ÇÁ¸®ÆÕÀÇ SpriteRenderer(¹İÁö¸§ °è»ê¿ë). °¡´ÉÇÏ¸é ÇÁ¸®ÆÕ¿¡¼­ µå·¡±×.")]
-    [SerializeField] private SpriteRenderer fruitSprite;
+    private struct FruitSlot
+    {
+        public FruitTarget ft;
+        public float angleDeg;   // ë””ìŠ¤í¬ ë¡œì»¬ ê¸°ì¤€ ê°ë„
+    }
 
-    [Header("Attachment")]
-    [Tooltip("µğ½ºÅ© Ç¥¸é¿¡¼­ ¹Ù±ùÀ¸·Î ¿©À¯(µğ½ºÅ©-°úÀÏ »çÀÌ Æ´ º¸Á¤)")]
-    [SerializeField] private float radiusPadding = 0.05f;
-
-    [Tooltip("°úÀÏ ¹İÁö¸§ Ãß°¡ ¿©À¯(¾Æ¿ô¶óÀÎ/Äİ¶óÀÌ´õ Â÷ÀÌ º¸Á¤)")]
-    [SerializeField] private float fruitPadding = 0.02f;
-
-    // »ı¼ºµÈ °úÀÏ °ü¸®
-    private readonly List<FruitTarget> spawned = new();
+    private readonly List<FruitSlot> slots = new();
 
     private void Awake()
     {
-        // ¾ÈÀü Ä³½Ã: ÀÎ½ºÆåÅÍ¿¡ ¾È ²È¾Æµµ ÃÖ´ëÇÑ µ¿ÀÛÇÏ°Ô
+        if (worldFruitRoot == null)
+            worldFruitRoot = transform;
+
+        // ì›”ë“œ ë£¨íŠ¸ëŠ” ìŠ¤ì¼€ì¼ 1 ê°•ì œ(ë¶€ëª¨ ì˜í–¥ ìµœì†Œí™”)
+        worldFruitRoot.localScale = Vector3.one;
+
         if (fruitSprite == null && fruitPrefab != null)
-            fruitSprite = fruitPrefab.GetComponentInChildren<SpriteRenderer>();
+            fruitSprite = fruitPrefab.GetComponentInChildren<SpriteRenderer>(true);
     }
 
-    /// <summary>
-    /// ½ºÅ×ÀÌÁö °úÀÏ »ı¼º
-    /// - °¢µµ °è»ê: FruitRingPlacer
-    /// - À§Ä¡ ¹èÄ¡: FruitRoot ·ÎÄÃ ÁÂÇ¥·Î ¹èÄ¡(ºÎ¸ğ È¸Àü¿¡ µû¶ó °°ÀÌ È¸Àü)
-    /// </summary>
     public void BuildStage(int fruitCount)
     {
         ClearStage();
 
-        if (diskRig == null || fruitRoot == null || fruitPrefab == null) return;
-        if (diskSprite == null || diskSprite.sprite == null) return;
-        if (fruitCount <= 0) return;
+        if (diskRig == null || diskSprite == null || diskSprite.sprite == null) return;
+        if (fruitPrefab == null || fruitCount <= 0) return;
 
-        // (Áß¿ä) ÇØ°á A: FruitRoot´Â DiskRigÀÇ ÀÚ½ÄÀÌ¾î¾ß µğ½ºÅ©¿Í °°ÀÌ È¸ÀüÇÑ´Ù.
-        // ½Ç¼ö ¹æÁö: ·±Å¸ÀÓ¿¡¼­ °­Á¦ ºÎ¸ğ¸¦ ¸ÂÃç¹ö¸²(¿øÇÏ¸é ÀÌ ÁÙÀº »èÁ¦ °¡´É)
-        if (fruitRoot.parent != diskRig)
-            fruitRoot.SetParent(diskRig, true);
-
-        // 1) ¹èÄ¡ °¢µµ °áÁ¤
+        // ê°ë„ ìƒì„±
         var placer = new FruitRingPlacer();
-        var rules = placementRules ?? new FruitRingPlacer.Rules(); // ÀÎ½ºÆåÅÍ rules°¡ nullÀÌ¸é ±âº»°ª »ç¿ë
+        var rules = placementRules ?? new FruitRingPlacer.Rules();
         List<float> angles = placer.BuildAngles(fruitCount, rules);
 
-        // 2) µğ½ºÅ© Ç¥¸é¿¡ "ºÙ´Â" ·ÎÄÃ ¹İÁö¸§(ÇÑ ¹ø¸¸ °è»ê)
-        float attachRadiusLocal = GetAttachRadiusLocal();
-
-        // 3) °úÀÏ »ı¼º + ·ÎÄÃ ¹èÄ¡(ÀÌ·¯¸é DiskRig°¡ È¸ÀüÇÒ ¶§ °°ÀÌ µ·´Ù)
+        // ê³¼ì¼ ìƒì„± (ë¶€ëª¨ëŠ” worldFruitRoot = ë””ìŠ¤í¬ ìì‹ ì•„ë‹˜)
         for (int i = 0; i < angles.Count; i++)
         {
-            float angle = angles[i];
-
-            Vector3 localOffset = AngleToLocalOffset(angle, attachRadiusLocal);
-
-            FruitTarget ft = Instantiate(fruitPrefab, fruitRoot);
-            ft.transform.localPosition = localOffset;
-            ft.transform.localRotation = Quaternion.identity;
-
-            spawned.Add(ft);
+            FruitTarget ft = Instantiate(fruitPrefab, worldFruitRoot);
+            ft.transform.rotation = Quaternion.identity; // í•„ìš”ì‹œ
+            slots.Add(new FruitSlot { ft = ft, angleDeg = angles[i] });
         }
+
+        // ìƒì„± ì§í›„ í•œ ë²ˆ ìœ„ì¹˜ ê°±ì‹ 
+        UpdateFruitPositions();
     }
 
-    /// <summary>
-    /// ÇöÀç ½ºÅ×ÀÌÁö °úÀÏ ÀüºÎ Á¦°Å
-    /// </summary>
+    private void LateUpdate()
+    {
+        // ë””ìŠ¤í¬ê°€ íšŒì „ ì¤‘ì´ë©´ ë§¤ í”„ë ˆì„ ë”°ë¼ê°€ì•¼ â€œë¶€ëª¨ ì—†ì´ íšŒì „ ë™ê¸°í™”â€ê°€ ë¨
+        if (slots.Count > 0)
+            UpdateFruitPositions();
+    }
+
     public void ClearStage()
     {
-        for (int i = spawned.Count - 1; i >= 0; i--)
+        for (int i = slots.Count - 1; i >= 0; i--)
         {
-            if (spawned[i] != null)
-                Destroy(spawned[i].gameObject);
+            if (slots[i].ft != null)
+                Destroy(slots[i].ft.gameObject);
         }
-        spawned.Clear();
+        slots.Clear();
     }
 
-    /// <summary>
-    /// (ÇÙ½É) µğ½ºÅ© Ç¥¸é¿¡ °úÀÏÀÌ "ºÙ´Â" ·ÎÄÃ ¹İÁö¸§ °è»ê
-    /// - DiskVisual¸¸ scaleÀÌ º¯ÇØµµ ÀÌ °ªÀº ¾ÈÁ¤ÀûÀ¸·Î º¯ÇÑ´Ù.
-    /// - FruitRoot´Â scale=1À» ÀüÁ¦·Î °úÀÏ Å©±â°¡ °°ÀÌ Ä¿ÁöÁö ¾Ê´Â´Ù.
-    ///
-    /// attachRadiusLocal = diskLocalR * diskVisualLocalScale
-    ///                  + fruitLocalR * fruitWorldScale(´ë°³ 1)
-    ///                  + paddingµé
-    /// </summary>
-    private float GetAttachRadiusLocal()
+    private void UpdateFruitPositions()
     {
-        // µğ½ºÅ© ·ÎÄÃ ¹İÁö¸§(¿¡¼Â ±âÁØ)
-        float diskLocalR = diskSprite.sprite.bounds.extents.x;
+        Vector3 center = GetDiskCenterWorld();                // íšŒì „ ì¤‘ì‹¬(ì›ì ) í™•ì •
+        float attachR = GetAttachRadiusWorld();               // diskR + fruitR (+padding)
 
-        // µğ½ºÅ© ºñÁÖ¾óÀÇ ½ºÄÉÀÏ(·ÎÄÃ). DiskVisual¸¸ ½ºÄÉÀÏÀ» ¹Ù²Ù´Â °ÍÀ» ÀüÁ¦·Î ÇÔ.
-        float diskScale = diskSprite.transform.localScale.x;
+        Quaternion diskRot = diskRig.rotation;                // ë””ìŠ¤í¬ì˜ í˜„ì¬ íšŒì „(ì›”ë“œ)
 
-        float diskR = diskLocalR * diskScale;
+        for (int i = 0; i < slots.Count; i++)
+        {
+            var s = slots[i];
+            if (s.ft == null) continue;
+
+            // ë””ìŠ¤í¬ ë¡œì»¬ ê¸°ì¤€ ë°©í–¥(ê°ë„)
+            float rad = s.angleDeg * Mathf.Deg2Rad;
+            Vector3 dirLocal = new Vector3(Mathf.Cos(rad), Mathf.Sin(rad), 0f);
+
+            // ë””ìŠ¤í¬ íšŒì „ ì ìš©í•œ ì›”ë“œ ë°©í–¥
+            Vector3 dirWorld = diskRot * dirLocal;
+
+            s.ft.transform.position = center + dirWorld * attachR;
+
+            // â€œì‚¬ê³¼ë„ ê°™ì´ ëˆë‹¤â€ ì—°ì¶œì´ í•„ìš”í•˜ë©´ íšŒì „ë„ ë§ì¶”ê¸°(ì›í•˜ë©´ ë„ë©´ ë¨)
+            s.ft.transform.rotation = diskRot;
+
+            slots[i] = s;
+        }
+    }
+
+    private Vector3 GetDiskCenterWorld()
+    {
+        // ì›ì¹™: íšŒì „ ì¤‘ì‹¬ì€ diskRig.position ì´ê²Œ 1ìˆœìœ„ ì •ë‹µ
+        // (diskSprite.bounds.centerë¥¼ ì“°ë©´ í”¼ë²—/ì˜¤í”„ì…‹ì— ë”°ë¼ ì¤‘ì‹¬ì´ í”ë“¤ë¦´ ìˆ˜ ìˆìŒ)
+        return diskRig.position;
+    }
+
+    private float GetAttachRadiusWorld()
+    {
+        float diskR = GetDiskRadiusWorldStable(); // ë””ìŠ¤í¬ì˜ â€œì‹¤ì œ ì›”ë“œ ë°˜ì§€ë¦„â€
 
         float fruitR = 0f;
         if (fruitSprite != null && fruitSprite.sprite != null)
         {
-            // °úÀÏ ·ÎÄÃ ¹İÁö¸§(¿¡¼Â ±âÁØ)
-            float fruitLocalR = fruitSprite.sprite.bounds.extents.x;
-
-            // FruitRoot¸¦ scale=1·Î À¯ÁöÇÑ´Ù¸é, °úÀÏ Å©±â´Â ÇÁ¸®ÆÕ ½ºÄÉÀÏ¸¸ Àû¿ëµÊ
-            // ¿©±â¼­´Â fruitSpriteÀÇ ÇöÀç lossyScaleÀ» ¹İ¿µ(ÇÁ¸®ÆÕ/¾À ¸ğµÎ ´ëÀÀ)
-            float fruitScale = fruitSprite.transform.lossyScale.x;
-
-            fruitR = fruitLocalR * fruitScale;
+            // ì‚¬ê³¼ ë°˜ì§€ë¦„(ì—ì…‹ ê¸°ì¤€) * í”„ë¦¬íŒ¹ ë¡œì»¬ ìŠ¤ì¼€ì¼(ì›”ë“œ ë£¨íŠ¸ ì•„ë˜ë¼ scale ì „íŒŒ ì—†ìŒ)
+            float assetR = fruitSprite.sprite.bounds.extents.x;
+            float prefabScale = fruitPrefab.transform.localScale.x;
+            fruitR = assetR * prefabScale;
         }
 
-        return Mathf.Max(0.01f, diskR + fruitR + radiusPadding + fruitPadding);
+        return Mathf.Max(0.01f, diskR + fruitR + contactPadding);
     }
-
-    /// <summary>
-    /// angle(deg) + r(local) -> FruitRoot ±âÁØ ·ÎÄÃ ¿ÀÇÁ¼Â º¤ÅÍ
-    /// </summary>
-    private static Vector3 AngleToLocalOffset(float degrees, float r)
+    private float GetDiskRadiusWorldStable()
     {
-        float rad = degrees * Mathf.Deg2Rad;
-        return new Vector3(Mathf.Cos(rad) * r, Mathf.Sin(rad) * r, 0f);
+        // ì—ì…‹ ê¸°ì¤€ ë¡œì»¬ ë°˜ì§€ë¦„
+        float localR = diskSprite.sprite.bounds.extents.x;
+
+        // ìŠ¤ì¼€ì¼ë§Œ ë°˜ì˜(íšŒì „ ì˜í–¥ ì—†ìŒ)
+        Vector3 worldVec = diskSprite.transform.TransformVector(new Vector3(localR, 0f, 0f));
+        return worldVec.magnitude;
     }
 }

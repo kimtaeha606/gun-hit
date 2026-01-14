@@ -1044,8 +1044,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StageSpawner
   diskRig: {fileID: 1428617435}
-  fruitRoot: {fileID: 371276830}
+  diskSprite: {fileID: 1428617434}
+  worldFruitRoot: {fileID: 0}
   fruitPrefab: {fileID: 6992492794814505922, guid: b5823e697b5fd324eaf51a5ee3b46649, type: 3}
+  fruitSprite: {fileID: 908468786449699521, guid: b5823e697b5fd324eaf51a5ee3b46649, type: 3}
   placementRules:
     mode: 0
     randomStartAngle: 1
@@ -1054,10 +1056,7 @@ MonoBehaviour:
     maxTriesPerFruit: 60
     useForbiddenArcs: 0
     forbiddenArcs: []
-  diskSprite: {fileID: 1428617434}
-  fruitSprite: {fileID: 908468786449699521, guid: b5823e697b5fd324eaf51a5ee3b46649, type: 3}
-  radiusPadding: 0.1
-  fruitPadding: 0.02
+  contactPadding: 0
 --- !u!4 &1430842501
 Transform:
   m_ObjectHideFlags: 0
