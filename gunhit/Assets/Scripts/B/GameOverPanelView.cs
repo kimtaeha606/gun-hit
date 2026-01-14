@@ -24,6 +24,9 @@ public sealed class GameOverPanelView : MonoBehaviour
     public void Show()
     {
         panelRoot.SetActive(true);
+
+        foreach (Transform child in panelRoot.transform)
+            child.gameObject.SetActive(true);
     }
 
     public void Hide()
