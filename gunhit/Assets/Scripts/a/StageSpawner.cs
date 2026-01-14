@@ -29,14 +29,13 @@ public sealed class StageSpawner : MonoBehaviour
         if (fruitCount <= 0) return;
 
         var placer = new FruitRingPlacer();
-        var rules = new FruitRingPlacer.Rules
-        {
-            mode = FruitRingPlacer.Mode.Uniform,
-            randomStartAngle = true,
-            minSeparationDeg = 18f
-        };
+        var rules = placementRules ?? new FruitRingPlacer.Rules();
+        var angles = placer.BuildAngles(fruitCount, rules);
 
-        List<float> angles = placer.BuildAngles(fruitCount, rules);
+
+
+
+        
 
         for (int i = 0; i < angles.Count; i++)
         {

@@ -29,7 +29,7 @@ public class GameCoreFlow : MonoBehaviour
     private void OnDisable()
     {
         GameSignals.ShootRequested -= OnShootRequested;
-        GameSignals.FruitDestroyed += OnFruitDestroyed;
+        GameSignals.FruitDestroyed -= OnFruitDestroyed;
         GameSignals.DiskHitOrMiss -= OnDiskHitOrMiss;
     }
 
