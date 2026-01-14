@@ -13,6 +13,9 @@ public sealed class StageSpawner : MonoBehaviour
     [Tooltip("각도 랜덤 오프셋(0이면 균등 배치)")]
     [SerializeField] private float randomAngleJitter = 0f;
 
+    [SerializeField] private SpriteRenderer diskSprite;
+    [SerializeField] private float radiusPadding = 0.1f;
+
     private readonly List<FruitTarget> spawned = new();
 
     public void BuildStage(int fruitCount)
@@ -31,7 +34,9 @@ public sealed class StageSpawner : MonoBehaviour
             if (randomAngleJitter > 0f)
                 angle += Random.Range(-randomAngleJitter, randomAngleJitter);
 
-            Vector3 localPos = AngleToLocalPos(angle, radius);
+            float useRadius = GetAutoRadius();
+            Vector3 localPos = AngleToLocalPos(angle, useRadius);
+
 
             FruitTarget ft = Instantiate(fruitPrefab, diskRoot);
             ft.transform.localPosition = localPos;
@@ -56,5 +61,13 @@ public sealed class StageSpawner : MonoBehaviour
         float rad = degrees * Mathf.Deg2Rad;
         return new Vector3(Mathf.Cos(rad) * r, Mathf.Sin(rad) * r, 0f);
     }
-        
+
+    private float GetAutoRadius()
+    {
+        if (diskSprite == null) return radius;
+        // bounds는 월드 기준 크기
+        float worldRadius = diskSprite.bounds.extents.x; // 원판이 정원이라고 가정
+        return Mathf.Max(0.01f, worldRadius + radiusPadding);
+    }
+
 }
