@@ -1,5 +1,6 @@
 using UnityEngine;
 using static StageDatabase;
+using System.Collections;
 
 public class GameCoreFlow : MonoBehaviour
 {
@@ -40,6 +41,8 @@ public class GameCoreFlow : MonoBehaviour
 
     public void StartStage(int stageIndex)
     {
+        CancelGameOverRoutine();
+
         currentStage = stageIndex;
 
         StageConfig cfg = GetStageConfig(stageIndex);
@@ -95,9 +98,9 @@ public class GameCoreFlow : MonoBehaviour
 
         if (ammo == 0 && fruitsRemaining > 0)
         {
-            // ����: ������ ź�� ���ư��� ���� ���ߴ� ����
-            // B�� FruitHit ���� ������ �����̺ꡱ��.
-            TriggerGameOver();
+            
+            
+            CheckGameOverDeferred();  
         }
     }
 
@@ -143,4 +146,37 @@ public class GameCoreFlow : MonoBehaviour
 
         GameSignals.RaiseGameOver();
     }
+
+    private Coroutine gameOverRoutine;
+
+    private void CheckGameOverDeferred()
+    {
+        if (ammo != 0) return;
+        if (fruitsRemaining <= 0) return;
+
+        if (gameOverRoutine != null) StopCoroutine(gameOverRoutine);
+        gameOverRoutine = StartCoroutine(CoGameOverAfter(0.6f)); // 0.4~1.0 추천, 3초는 너무 김
+    }
+
+    private IEnumerator CoGameOverAfter(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (ammo == 0 && fruitsRemaining > 0)
+            TriggerGameOver();
+
+        gameOverRoutine = null;
+        
+    }
+
+    private void CancelGameOverRoutine()
+    {
+        if (gameOverRoutine != null)
+        {
+            StopCoroutine(gameOverRoutine);
+            gameOverRoutine = null;
+        }
+    }
+
 }
+
