@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 public sealed class UIGameplayBinder : MonoBehaviour
@@ -5,6 +6,17 @@ public sealed class UIGameplayBinder : MonoBehaviour
 
     [SerializeField] private StageNumberView stageNumberView;
     [SerializeField] private AmmoIconView ammoIconView;
+    [SerializeField] private AmmoUsedOverlayView ammoUsedOverlayView;
+    private int totalAmmo;
+    private void Awake()
+    {
+        if (stageNumberView == null)
+            stageNumberView = GetComponentInChildren<StageNumberView>(true);
+        if (ammoIconView == null)
+            ammoIconView = GetComponentInChildren<AmmoIconView>(true);
+        if (ammoUsedOverlayView == null)
+            ammoUsedOverlayView = GetComponentInChildren<AmmoUsedOverlayView>(true);
+    }
     private void OnEnable()
     {
         GameSignals.StageStarted  += OnStageStarted;
@@ -30,12 +42,21 @@ public sealed class UIGameplayBinder : MonoBehaviour
 
     private void OnAmmoSet(int ammo)
     {
-        ammoIconView.Render(ammo);
+        totalAmmo=ammo;
+        if (ammoIconView != null)
+            ammoIconView.Render(ammo);
     }
 
     private void OnAmmoChanged(int ammo)
     {
-        // 발사 후 감소 반영
+        int usedAmmo = Mathf.Max(0, totalAmmo - ammo);
+        if (ammoUsedOverlayView == null)
+        {
+            Debug.LogWarning("UIGameplayBinder: ammoUsedOverlayView is null.", this);
+            return;
+        }
+        Debug.Log($"UIGameplayBinder.OnAmmoChanged ammo={ammo} usedAmmo={usedAmmo} totalAmmo={totalAmmo} target={ammoUsedOverlayView.name}", this);
+        ammoUsedOverlayView.MarkUsed(usedAmmo, totalAmmo);
     }
 
     private void OnGameOver()

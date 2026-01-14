@@ -40,6 +40,7 @@ public sealed class AmmoIconView : MonoBehaviour
         }
 
         Layout(ammo);
+        Debug.Log("실행완료");
     }
 
     private void EnsurePoolSize(int needed)
@@ -80,6 +81,12 @@ public sealed class AmmoIconView : MonoBehaviour
             pool[i].rectTransform.anchoredPosition =
                 new Vector2(0f, i * step);
         }
+    }
+
+    public void SetSpriteAt(int index, Sprite sprite)
+    {
+    if (index < 0 || index >= pool.Count) return;
+    pool[index].sprite = sprite;
     }
 
 }
