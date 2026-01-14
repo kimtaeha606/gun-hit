@@ -6,12 +6,12 @@ public sealed class StageSpawner : MonoBehaviour
     [Header("Refs")]
     [SerializeField] private Transform diskRoot;
     [SerializeField] private FruitTarget fruitPrefab;
+    [SerializeField] private FruitRingPlacer fruitRingPlacer;
 
     [Header("Placement")]
     [Tooltip("반지름(원판 중심 기준)")]
     [SerializeField] private float radius = 1.8f;
-    [Tooltip("각도 랜덤 오프셋(0이면 균등 배치)")]
-    [SerializeField] private float randomAngleJitter = 0f;
+    
 
     [SerializeField] private SpriteRenderer diskSprite;
     [SerializeField] private float radiusPadding = 0.1f;
@@ -24,19 +24,23 @@ public sealed class StageSpawner : MonoBehaviour
 
         if (diskRoot == null || fruitPrefab == null) return;
         if (fruitCount <= 0) return;
-        //이건 나중에 수정할 거임 
-        float step = 360f / fruitCount;
-        float baseOffset = Random.Range(0f, 360f);
-        //
-        for (int i = 0; i < fruitCount; i++)
+
+        var placer = new FruitRingPlacer();
+        var rules = new FruitRingPlacer.Rules
         {
-            float angle = baseOffset + step * i;
-            if (randomAngleJitter > 0f)
-                angle += Random.Range(-randomAngleJitter, randomAngleJitter);
+            mode = FruitRingPlacer.Mode.Uniform,
+            randomStartAngle = true,
+            minSeparationDeg = 18f
+        };
+
+        List<float> angles = placer.BuildAngles(fruitCount, rules);
+
+        for (int i = 0; i < angles.Count; i++)
+        {
+            float angle = angles[i];
 
             float useRadius = GetAutoRadius();
             Vector3 localPos = AngleToLocalPos(angle, useRadius);
-
 
             FruitTarget ft = Instantiate(fruitPrefab, diskRoot);
             ft.transform.localPosition = localPos;
@@ -44,6 +48,8 @@ public sealed class StageSpawner : MonoBehaviour
 
             spawned.Add(ft);
         }
+
+    
     }
 
     public void ClearStage()
