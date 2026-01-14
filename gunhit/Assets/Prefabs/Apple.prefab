@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 119517598020982452}
   - component: {fileID: 1622877039632420186}
   - component: {fileID: 6992492794814505922}
-  - component: {fileID: 2285659446964162426}
   m_Layer: 0
   m_Name: Apple
   m_TagString: Untagged
@@ -170,17 +169,3 @@ MonoBehaviour:
   breakDuration: 0.35
   targetCollider: {fileID: 119517598020982452}
   rb: {fileID: 0}
---- !u!114 &2285659446964162426
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2461978218291236761}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dcf4aca9db00be546a9453597bbf4eda, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AnimatorStateProbe
-  animator: {fileID: 1622877039632420186}
-  sr: {fileID: 908468786449699521}
