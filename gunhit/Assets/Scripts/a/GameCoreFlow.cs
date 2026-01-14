@@ -10,7 +10,7 @@ public class GameCoreFlow : MonoBehaviour
     [SerializeField] private DiskController disk;
     [SerializeField] private StageDatabase stageDb;
 
-    [Header("Fallback (stageDb ¾øÀ» ¶§)")]
+    [Header("Fallback (stageDb ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½)")]
     [SerializeField] private StageConfig[] fallbackStages;
 
     [Header("State (read-only)")]
@@ -28,7 +28,7 @@ public class GameCoreFlow : MonoBehaviour
 
     private void OnDisable()
     {
-        GameSignals.ShootRequested -= OnShootRequested;
+        GameSignals.BulletFired -= OnShootRequested;
         GameSignals.FruitDestroyed -= OnFruitDestroyed;
         GameSignals.DiskHitOrMiss -= OnDiskHitOrMiss;
     }
@@ -49,7 +49,7 @@ public class GameCoreFlow : MonoBehaviour
 
         state = CoreState.Playing;
 
-        // ÇÏÀ§ È£Ãâ
+        // ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½
         if (disk != null)
         {
             disk.Apply(cfg.rotateSpeed);
@@ -59,11 +59,11 @@ public class GameCoreFlow : MonoBehaviour
         if (spawner != null)
             spawner.BuildStage(cfg.fruitCount);
 
-        // ÀÌº¥Æ® ¹ßÇà
+        // ï¿½Ìºï¿½Æ® ï¿½ï¿½ï¿½ï¿½
         GameSignals.RaiseStageStarted(currentStage);
         GameSignals.RaiseAmmoSet(ammo);
 
-        // Áï½Ã Å¬¸®¾î/Áï½Ã °ÔÀÓ¿À¹ö ¹æÁö Ã³¸®
+        // ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
         if (fruitsRemaining == 0)
             StageClear();
         else if (ammo == 0)
@@ -90,12 +90,13 @@ public class GameCoreFlow : MonoBehaviour
         if (ammo <= 0) return;
 
         ammo--;
+        Debug.Log("ì´ì•Œ ê°ì†Œ");
         GameSignals.RaiseAmmoChanged(ammo);
 
         if (ammo == 0 && fruitsRemaining > 0)
         {
-            // ÁÖÀÇ: ¸¶Áö¸· ÅºÀÌ ³¯¾Æ°¡¼­ °úÀÏ ¸ÂÃß´Â °æ¿ì´Â
-            // B°¡ FruitHit ¸ÕÀú º¸³»¾ß ¡°¼¼ÀÌºê¡±µÊ.
+            // ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Åºï¿½ï¿½ ï¿½ï¿½ï¿½Æ°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß´ï¿½ ï¿½ï¿½ï¿½ï¿½
+            // Bï¿½ï¿½ FruitHit ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ìºê¡±ï¿½ï¿½.
             TriggerGameOver();
         }
     }
@@ -114,8 +115,8 @@ public class GameCoreFlow : MonoBehaviour
 
     private void OnDiskHitOrMiss()
     {
-        // ¹Ì½º Ã³¸®: ¾Æ¹« ÀÏ ¾øÀ½(ÅºÀº ÀÌ¹Ì °¨¼ÒµÊ)
-        // È®ÀåÇÒ °Å¸é ¿©±â¼­ ¡°¹Ì½º ¿¬Ãâ/»ç¿îµå ÀÌº¥Æ®¡±¸¸ ¹ßÇà
+        // ï¿½Ì½ï¿½ Ã³ï¿½ï¿½: ï¿½Æ¹ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(Åºï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½Òµï¿½)
+        // È®ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½â¼­ ï¿½ï¿½ï¿½Ì½ï¿½ ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (state != CoreState.Playing) return;
     }
 
@@ -126,7 +127,7 @@ public class GameCoreFlow : MonoBehaviour
         state = CoreState.Cleared;
         GameSignals.RaiseStageCleared(currentStage);
 
-        // Áï½Ã ´ÙÀ½ ½ºÅ×ÀÌÁö
+        // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         StartStage(currentStage + 1);
     }
 
@@ -137,7 +138,7 @@ public class GameCoreFlow : MonoBehaviour
         state = CoreState.GameOver;
 
         if (disk != null) disk.SetActive(false);
-        // ¼±ÅÃ: ½ºÅ×ÀÌÁö Á¤¸®
+        // ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         // if (spawner != null) spawner.ClearStage();
 
         GameSignals.RaiseGameOver();

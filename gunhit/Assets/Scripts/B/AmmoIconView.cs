@@ -40,6 +40,7 @@ public sealed class AmmoIconView : MonoBehaviour
         }
 
         Layout(ammo);
+        Debug.Log("실행완료");
     }
 
     private void EnsurePoolSize(int needed)
