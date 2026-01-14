@@ -34,5 +34,6 @@ public sealed class PlayerShooterInput : MonoBehaviour
     {
         // "의도"만 올림
         ShootIntent?.Invoke();
+        Debug.Log("발사 신호 전달 완료");
     }
 }
