@@ -197,6 +197,7 @@ MonoBehaviour:
   spawner: {fileID: 1430842500}
   disk: {fileID: 1428617433}
   stageDb: {fileID: 0}
+  rotationDriver: {fileID: 0}
   fallbackStages: []
   currentStage: 0
   ammo: 0
@@ -741,7 +742,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 569924593}
-  - component: {fileID: 569924592}
   - component: {fileID: 569924589}
   - component: {fileID: 569924591}
   - component: {fileID: 569924590}
@@ -954,14 +954,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!222 &569924592
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 569924588}
-  m_CullTransparentMesh: 1
 --- !u!224 &569924593
 RectTransform:
   m_ObjectHideFlags: 0
