@@ -322,6 +322,37 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -80}
   m_SizeDelta: {x: 600, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &371276829
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 371276830}
+  m_Layer: 0
+  m_Name: FruitRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &371276830
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 371276829}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &418832512
 GameObject:
   m_ObjectHideFlags: 0
@@ -1012,7 +1043,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3ad72fb248ac1049846ca004d306e7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StageSpawner
-  diskRoot: {fileID: 1428617435}
+  diskRig: {fileID: 1428617435}
+  fruitRoot: {fileID: 371276830}
   fruitPrefab: {fileID: 6992492794814505922, guid: b5823e697b5fd324eaf51a5ee3b46649, type: 3}
   placementRules:
     mode: 0
@@ -1022,11 +1054,10 @@ MonoBehaviour:
     maxTriesPerFruit: 60
     useForbiddenArcs: 0
     forbiddenArcs: []
-  radius: 1.8
   diskSprite: {fileID: 1428617434}
-  fruitSprite: {fileID: 0}
+  fruitSprite: {fileID: 908468786449699521, guid: b5823e697b5fd324eaf51a5ee3b46649, type: 3}
   radiusPadding: 0.1
-  fruitRadiusPadding: 0.02
+  fruitPadding: 0.02
 --- !u!4 &1430842501
 Transform:
   m_ObjectHideFlags: 0
@@ -1392,3 +1423,4 @@ SceneRoots:
   - {fileID: 1428617435}
   - {fileID: 1211916558}
   - {fileID: 1536294021}
+  - {fileID: 371276830}
