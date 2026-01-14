@@ -25,6 +25,8 @@ public sealed class FruitTarget : MonoBehaviour, IHitReceiver
     [Tooltip("맞은 뒤 리지드바디가 있으면 멈추거나 비활성화할 때 사용(선택)")]
     [SerializeField] private Rigidbody2D rb;
 
+    
+
     private bool isBroken;
 
     private void Awake()
@@ -57,6 +59,9 @@ public sealed class FruitTarget : MonoBehaviour, IHitReceiver
     {
         if (seconds < 0f) seconds = 0f;
         yield return new WaitForSeconds(seconds);
+
+        GameSignals.RaiseFruitDestroyed(this);
+      
         Destroy(gameObject);
     }
 }
