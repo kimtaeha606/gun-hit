@@ -861,7 +861,6 @@ MonoBehaviour:
   diskRoot: {fileID: 1428617435}
   fruitPrefab: {fileID: 6992492794814505922, guid: b5823e697b5fd324eaf51a5ee3b46649, type: 3}
   radius: 1.8
-  randomAngleJitter: 0
   diskSprite: {fileID: 1428617434}
   radiusPadding: 0.1
 --- !u!4 &1430842501
