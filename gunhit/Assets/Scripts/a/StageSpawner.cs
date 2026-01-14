@@ -6,7 +6,8 @@ public sealed class StageSpawner : MonoBehaviour
     [Header("Refs")]
     [SerializeField] private Transform diskRoot;
     [SerializeField] private FruitTarget fruitPrefab;
-    [SerializeField] private FruitRingPlacer fruitRingPlacer;
+    [SerializeField] private FruitRingPlacer.Rules placementRules;
+
 
     [Header("Placement")]
     [Tooltip("반지름(원판 중심 기준)")]
