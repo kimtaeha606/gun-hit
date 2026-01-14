@@ -30,5 +30,8 @@ public static class GameSignals
 
     public static event Action<int> StageCleared;
     public static void RaiseStageCleared(int stageIndex) => StageCleared?.Invoke(stageIndex);
+
+    public static event Action<FruitTarget> FruitDestroyed;
+    public static void RaiseFruitDestroyed(FruitTarget fruit) => FruitDestroyed?.Invoke(fruit);
 }
 

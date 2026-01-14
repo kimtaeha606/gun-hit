@@ -22,14 +22,14 @@ public class GameCoreFlow : MonoBehaviour
     private void OnEnable()
     {
         GameSignals.ShootRequested += OnShootRequested;
-        GameSignals.FruitHit += OnFruitHit;
+        GameSignals.FruitDestroyed += OnFruitDestroyed;
         GameSignals.DiskHitOrMiss += OnDiskHitOrMiss;
     }
 
     private void OnDisable()
     {
         GameSignals.ShootRequested -= OnShootRequested;
-        GameSignals.FruitHit -= OnFruitHit;
+        GameSignals.FruitDestroyed += OnFruitDestroyed;
         GameSignals.DiskHitOrMiss -= OnDiskHitOrMiss;
     }
 
@@ -100,13 +100,13 @@ public class GameCoreFlow : MonoBehaviour
         }
     }
 
-    private void OnFruitHit(FruitTarget fruit)
+    private void OnFruitDestroyed(FruitTarget fruit)
     {
+        
         if (state != CoreState.Playing) return;
         if (fruit == null) return;
 
-        // 과일 자체 반응 처리
-        fruit.OnHit();
+        fruitsRemaining--;
 
         fruitsRemaining = Mathf.Max(0, fruitsRemaining - 1);
 
