@@ -20,14 +20,14 @@ public sealed class AudioSFXPlayer : MonoBehaviour
     {
         GameSignals.ShootRequested += OnShootRequested;
         GameSignals.GameOver += OnGameOver;
-        GameSignals.FruitDestroyed += OnFruitDestroyed;
+        GameSignals.FruitHit += OnFruitHit;
     }
 
     private void OnDisable()
     {
         GameSignals.ShootRequested -= OnShootRequested;
         GameSignals.GameOver -= OnGameOver;
-        GameSignals.FruitDestroyed -= OnFruitDestroyed;
+        GameSignals.FruitHit -= OnFruitHit;
     }
 
     private void OnShootRequested()
@@ -40,7 +40,7 @@ public sealed class AudioSFXPlayer : MonoBehaviour
         Play(gameOverClip);
     }
 
-    private void OnFruitDestroyed(FruitTarget fruit)
+    private void OnFruitHit(FruitTarget fruit)
     {
         Play(fruitDestroyedClip);
     }

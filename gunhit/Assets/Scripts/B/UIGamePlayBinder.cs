@@ -6,7 +6,8 @@ public sealed class UIGameplayBinder : MonoBehaviour
 
     [SerializeField] private StageNumberView stageNumberView;
     [SerializeField] private AmmoIconView ammoIconView;
-    [SerializeField] private AmmoUsedOverlayView ammoUsedOverlayView;
+    [SerializeField] private AmmoUsedOverlayView ammoUsedOverlayView;    
+    [SerializeField] private GameOverPanelView view;
     private int totalAmmo;
     private void Awake()
     {
@@ -16,6 +17,8 @@ public sealed class UIGameplayBinder : MonoBehaviour
             ammoIconView = GetComponentInChildren<AmmoIconView>(true);
         if (ammoUsedOverlayView == null)
             ammoUsedOverlayView = GetComponentInChildren<AmmoUsedOverlayView>(true);
+        if (view == null)
+            view = GetComponentInChildren<GameOverPanelView>(true);
     }
     private void OnEnable()
     {
@@ -61,7 +64,8 @@ public sealed class UIGameplayBinder : MonoBehaviour
 
     private void OnGameOver()
     {
-        // 게임오버 UI 표시
+        if (view != null)
+            view.Show();
     }
 
     private void OnStageCleared(int stageIndex)

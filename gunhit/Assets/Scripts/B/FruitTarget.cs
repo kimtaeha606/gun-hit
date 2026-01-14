@@ -44,6 +44,8 @@ public sealed class FruitTarget : MonoBehaviour, IHitReceiver
         // 중복 히트 방지
         if (targetCollider != null) targetCollider.enabled = false;
 
+        GameSignals.RaiseFruitHit(this);
+
         // 파괴 애니메이션 재생
         if (animator != null && !string.IsNullOrWhiteSpace(breakTriggerName))
         {
@@ -54,7 +56,7 @@ public sealed class FruitTarget : MonoBehaviour, IHitReceiver
         // 애니 끝나면 제거
         StartCoroutine(CoDestroyAfter(breakDuration));
 
-        GameSignals.RaiseFruitHit(this);
+        
     }
 
     private IEnumerator CoDestroyAfter(float seconds)
