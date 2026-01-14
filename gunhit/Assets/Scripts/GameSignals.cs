@@ -3,23 +3,23 @@ using System;
 
 public static class GameSignals
 {
-    // B(ÀÔ·Â/¼¦) -> A(ÄÚ¾î)
+    // B(ï¿½Ô·ï¿½/ï¿½ï¿½) -> A(ï¿½Ú¾ï¿½)
     public static event Action ShootRequested;
     public static void RaiseShootRequested() => ShootRequested?.Invoke();
 
-    // B(¹ß»çµÊ) -> A(ÄÚ¾î)
+    // B(ï¿½ß»ï¿½ï¿½) -> A(ï¿½Ú¾ï¿½)
     public static event Action BulletFired;
     public static void RaiseBulletFired() => BulletFired?.Invoke();
 
-    // B(È÷Æ® ÆÇÁ¤) -> A(ÄÚ¾î)
+    // B(ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½) -> A(ï¿½Ú¾ï¿½)
     public static event Action<FruitTarget> FruitHit;
     public static void RaiseFruitHit(FruitTarget fruit) => FruitHit?.Invoke(fruit);
 
-    // B(¹Ì½º/¿øÆÇ ¸íÁß) -> A(ÄÚ¾î)
+    // B(ï¿½Ì½ï¿½/ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½) -> A(ï¿½Ú¾ï¿½)
     public static event Action DiskHitOrMiss;
     public static void RaiseDiskHitOrMiss() => DiskHitOrMiss?.Invoke();
 
-    // A(ÄÚ¾î) -> UI/±âÅ¸
+    // A(ï¿½Ú¾ï¿½) -> UI/ï¿½ï¿½Å¸
     public static event Action<int> StageStarted;
     public static void RaiseStageStarted(int stageIndex) => StageStarted?.Invoke(stageIndex);
 

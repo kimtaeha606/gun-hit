@@ -53,6 +53,8 @@ public sealed class FruitTarget : MonoBehaviour, IHitReceiver
 
         // 애니 끝나면 제거
         StartCoroutine(CoDestroyAfter(breakDuration));
+
+        GameSignals.RaiseFruitHit(this);
     }
 
     private IEnumerator CoDestroyAfter(float seconds)
@@ -61,7 +63,7 @@ public sealed class FruitTarget : MonoBehaviour, IHitReceiver
         yield return new WaitForSeconds(seconds);
 
         GameSignals.RaiseFruitDestroyed(this);
-      
+
         Destroy(gameObject);
     }
 }
