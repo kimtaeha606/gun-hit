@@ -119,6 +119,52 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &159794795
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 159794797}
+  - component: {fileID: 159794796}
+  m_Layer: 0
+  m_Name: GameOverPanelView
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &159794796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 159794795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3d595e39373d3a458a14b16a62b944f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameOverPanelView
+  panelRoot: {fileID: 2103639330}
+  restartButton: {fileID: 569924589}
+--- !u!4 &159794797
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 159794795}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 970.2315, y: 512.3258, z: 0}
+  m_LocalScale: {x: 3.6120403, y: 3.6120403, z: 3.6120403}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 418832516}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &171826398
 GameObject:
   m_ObjectHideFlags: 0
@@ -447,6 +493,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 159794797}
   - {fileID: 1994359829}
   - {fileID: 2103639332}
   m_Father: {fileID: 0}
@@ -704,7 +751,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &569924589
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -745,11 +792,11 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 569924590}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2103639331}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GameOverPanelView, Assembly-CSharp
         m_MethodName: Restart
         m_Mode: 1
@@ -1717,7 +1764,7 @@ MonoBehaviour:
   stageNumberView: {fileID: 209158476}
   ammoIconView: {fileID: 1243157680}
   ammoUsedOverlayView: {fileID: 1243157681}
-  view: {fileID: 2103639331}
+  view: {fileID: 159794796}
 --- !u!4 &1536294021
 Transform:
   m_ObjectHideFlags: 0
@@ -1836,7 +1883,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1808622851
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2068,7 +2115,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2103639332}
-  - component: {fileID: 2103639331}
   m_Layer: 5
   m_Name: GameOverPanel
   m_TagString: Untagged
@@ -2076,21 +2122,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &2103639331
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2103639330}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3d595e39373d3a458a14b16a62b944f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameOverPanelView
-  panelRoot: {fileID: 2103639330}
-  restartButton: {fileID: 569924589}
-  quitButton: {fileID: 0}
 --- !u!224 &2103639332
 RectTransform:
   m_ObjectHideFlags: 0

@@ -64,8 +64,8 @@ public sealed class UIGameplayBinder : MonoBehaviour
 
     private void OnGameOver()
     {
-        if (view != null)
-            view.Show();
+        Debug.Log("온게임오버 호출 됨");
+        view.Show();
     }
 
     private void OnStageCleared(int stageIndex)
