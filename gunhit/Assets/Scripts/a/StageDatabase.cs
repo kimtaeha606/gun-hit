@@ -17,6 +17,7 @@ public sealed class StageDatabase : ScriptableObject
     [System.Serializable]
     public struct StageConfig
     {
+        public RotationPattern rotationPattern;
         public float rotateSpeed;
         public int fruitCount;
         public int ammo;

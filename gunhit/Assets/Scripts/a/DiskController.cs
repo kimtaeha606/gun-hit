@@ -13,7 +13,7 @@ public sealed class DiskController : MonoBehaviour
         if (diskTransform == null) diskTransform = transform;
     }
 
-    public void Apply(float rotateSpeed)
+    public void SetSpeed(float rotateSpeed)
     {
         speed = rotateSpeed;
     }
