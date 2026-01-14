@@ -29,7 +29,7 @@ public sealed class BulletProjectile : MonoBehaviour
         rb.linearVelocity = fireDir * speed;
 
         float angle = Mathf.Atan2(fireDir.y, fireDir.x) * Mathf.Rad2Deg;
-        rb.MoveRotation(angle);
+        rb.MoveRotation(angle - 90f);
 
         GameSignals.RaiseBulletFired();
     }
