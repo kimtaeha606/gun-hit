@@ -37,7 +37,7 @@ public sealed class FruitRingPlacer
     [Serializable]
     public sealed class Rules
     {
-        public Mode mode = Mode.Uniform;
+        public Mode mode = Mode.Random;
 
         // 균등 배치 시 기준 시작 각
         public bool randomStartAngle = true;

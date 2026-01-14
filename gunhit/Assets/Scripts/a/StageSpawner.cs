@@ -45,6 +45,10 @@ public sealed class StageSpawner : MonoBehaviour
         if (diskRig == null || diskSprite == null || diskSprite.sprite == null) return;
         if (fruitPrefab == null || fruitCount <= 0) return;
 
+        
+        
+
+
         // 각도 생성
         var placer = new FruitRingPlacer();
         var rules = placementRules ?? new FruitRingPlacer.Rules();
