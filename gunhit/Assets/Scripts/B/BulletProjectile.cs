@@ -7,7 +7,7 @@ public sealed class BulletProjectile : MonoBehaviour
 
     [SerializeField] private Vector2 dir = Vector2.up;
 
-    public System.Action<Collider2D> OnHit; // 외부로 알림
+    public System.Action<Collider2D> OnHit; // ?��?�??�림
 
     private void Awake()
     {
@@ -18,12 +18,13 @@ public sealed class BulletProjectile : MonoBehaviour
     {
         rb.linearVelocity = dir.normalized * speed;
         rb.rotation = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        GameSignals.RaiseBulletFired();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        OnHit?.Invoke(other);   // “맞았다”만 알림
-        Destroy(gameObject);    // 파괴 책임은 총알
+        OnHit?.Invoke(other);   // ?�맞?�다?�만 ?�림
+        Destroy(gameObject);    // ?�괴 책임?� 총알
 
         if (other.TryGetComponent(out IHitReceiver hit))
             hit.ReceiveHit(this);
@@ -44,3 +45,4 @@ public sealed class BulletProjectile : MonoBehaviour
             Destroy(gameObject);
     }
 }
+
