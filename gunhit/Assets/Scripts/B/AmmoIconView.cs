@@ -82,4 +82,10 @@ public sealed class AmmoIconView : MonoBehaviour
         }
     }
 
+    public void SetSpriteAt(int index, Sprite sprite)
+    {
+    if (index < 0 || index >= pool.Count) return;
+    pool[index].sprite = sprite;
+    }
+
 }
