@@ -53,6 +53,7 @@ public sealed class FruitTarget : MonoBehaviour, IHitReceiver
 
         // 애니 끝나면 제거
         StartCoroutine(CoDestroyAfter(breakDuration));
+        Debug.Log("코드 문제다.");
     }
 
     private IEnumerator CoDestroyAfter(float seconds)
