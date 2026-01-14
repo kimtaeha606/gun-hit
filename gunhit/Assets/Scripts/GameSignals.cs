@@ -7,6 +7,10 @@ public static class GameSignals
     public static event Action ShootRequested;
     public static void RaiseShootRequested() => ShootRequested?.Invoke();
 
+    // B(발사됨) -> A(코어)
+    public static event Action BulletFired;
+    public static void RaiseBulletFired() => BulletFired?.Invoke();
+
     // B(히트 판정) -> A(코어)
     public static event Action<FruitTarget> FruitHit;
     public static void RaiseFruitHit(FruitTarget fruit) => FruitHit?.Invoke(fruit);
@@ -34,4 +38,5 @@ public static class GameSignals
     public static event Action<FruitTarget> FruitDestroyed;
     public static void RaiseFruitDestroyed(FruitTarget fruit) => FruitDestroyed?.Invoke(fruit);
 }
+
 
