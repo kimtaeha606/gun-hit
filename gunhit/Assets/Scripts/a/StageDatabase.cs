@@ -24,7 +24,7 @@ public sealed class StageDatabase : ScriptableObject
 
         public static StageConfig Default()
         {
-            return new StageConfig { rotateSpeed = 60f, fruitCount = 3, ammo = 5 };
+            return new StageConfig { rotateSpeed = 60f, fruitCount = 6, ammo = 8 };
         }
     }
 }
