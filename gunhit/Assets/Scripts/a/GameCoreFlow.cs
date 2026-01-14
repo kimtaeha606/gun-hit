@@ -105,9 +105,7 @@ public class GameCoreFlow : MonoBehaviour
         
         if (state != CoreState.Playing) return;
         if (fruit == null) return;
-
-        fruitsRemaining--;
-
+        
         fruitsRemaining = Mathf.Max(0, fruitsRemaining - 1);
 
         if (fruitsRemaining == 0)

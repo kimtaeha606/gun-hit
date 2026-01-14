@@ -15,7 +15,9 @@ public sealed class StageSpawner : MonoBehaviour
     
 
     [SerializeField] private SpriteRenderer diskSprite;
+    [SerializeField] private SpriteRenderer fruitSprite;
     [SerializeField] private float radiusPadding = 0.1f;
+    [SerializeField] private float fruitRadiusPadding = 0.02f;
 
     private readonly List<FruitTarget> spawned = new();
 
@@ -72,9 +74,14 @@ public sealed class StageSpawner : MonoBehaviour
     private float GetAutoRadius()
     {
         if (diskSprite == null) return radius;
-        // bounds는 월드 기준 크기
-        float worldRadius = diskSprite.bounds.extents.x; // 원판이 정원이라고 가정
-        return Mathf.Max(0.01f, worldRadius + radiusPadding);
+
+        // diskSprite의 로컬 반지름(스프라이트 픽셀 크기 → 유니티 유닛 반영)을 로컬 스케일까지 포함해 계산
+        // bounds 대신 localBounds(로컬) + lossyScale을 명확히 분리해서 쓴다
+        float localHalfWidth = diskSprite.sprite.bounds.extents.x; // 로컬(스프라이트 에셋 기준)
+        float scaleX = diskSprite.transform.localScale.x;          // 같은 로컬 체인에서 쓰는 게 핵심
+
+        float localRadius = localHalfWidth * scaleX;
+        return Mathf.Max(0.01f, localRadius + radiusPadding);
     }
 
 }
