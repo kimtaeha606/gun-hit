@@ -10,6 +10,7 @@ public class GameCoreFlow : MonoBehaviour
     [SerializeField] private StageSpawner spawner;
     [SerializeField] private DiskController disk;
     [SerializeField] private StageDatabase stageDb;
+    [SerializeField] private DiskRotationDriver rotationDriver;
 
     [Header("Fallback (stageDb ���� ��)")]
     [SerializeField] private StageConfig[] fallbackStages;
@@ -55,9 +56,23 @@ public class GameCoreFlow : MonoBehaviour
         // ���� ȣ��
         if (disk != null)
         {
-            disk.Apply(cfg.rotateSpeed);
+            
             disk.SetActive(true);
         }
+
+        if (rotationDriver != null)
+        {
+            if (cfg.rotationPattern != null)
+                rotationDriver.SetPattern(cfg.rotationPattern, currentStage);
+            else
+                rotationDriver.SetPattern(null, currentStage);
+        }
+
+        if (cfg.rotationPattern == null && disk != null)
+        {
+            disk.SetSpeed(cfg.rotateSpeed);
+        }
+
 
         if (spawner != null)
             spawner.BuildStage(cfg.fruitCount);
@@ -155,7 +170,7 @@ public class GameCoreFlow : MonoBehaviour
         if (fruitsRemaining <= 0) return;
 
         if (gameOverRoutine != null) StopCoroutine(gameOverRoutine);
-        gameOverRoutine = StartCoroutine(CoGameOverAfter(0.6f)); // 0.4~1.0 추천, 3초는 너무 김
+        gameOverRoutine = StartCoroutine(CoGameOverAfter(1.0f)); // 0.4~1.0 추천, 3초는 너무 김
     }
 
     private IEnumerator CoGameOverAfter(float delay)
